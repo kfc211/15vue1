@@ -1,0 +1,114 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <title>Title</title>
+    <link type="text/css" rel="stylesheet" href="reset.css"/>
+    <style type="text/css">
+        #cartTable{margin:30px auto; border-collapse: collapse;}
+        td,th{padding:5px 10px;}
+        .txtCnt{width:30px; margin:0px 5px;}
+        button{padding:5px;}
+        .total{font-size:18px; color:darkred; font-weight:800;}
+    </style>
+    <script src="vue.js"></script>
+</head>
+<body>
+<div id="cart">
+    <table border="1" cellspacing="0" id="cartTable" >
+        <thead>
+        <tr>
+            <th><input type="checkbox" @click="check" :checked="checks.length == list.length" >全选</th>
+            <th>商品序号</th>
+            <th>商品编号</th>
+            <th>商品名称</th>
+            <th>商品数量</th>
+            <th>商品单价</th>
+            <th>移出</th>
+        </tr>
+        </thead>
+        <tbody>
+        <tr>
+            <td>选框</td>
+            <td>绑定序号</td>
+            <td>绑定商品编号</td>
+            <td>绑定商品名称</td>
+            <td>绑定商品数量以及实现增加和减少按钮功能</td>
+            <td>绑定价格</td>
+            <td>实现删除商品按钮功能</td>
+        </tr>
+        <tr v-for="(item,index) in list" :key="index">
+            <th><input type="checkbox" v-model="checks" :value="item">选择</th>
+            <td>{{index+1}}</td>
+            <td>{{item.id}}</td>
+            <td>{{item.name}}</td>
+            <td>
+                <input type="button" value="-" @click="minus(index)" :disabled="item.count==1">
+                {{item.count}}
+                <input type="button" value="+" @click="add(index)">
+            </td>
+            <td>{{item.price}}</td>
+            <td><input type="button" value="移除" @click="handleRemove(index)"></td>
+        </tr>
+        </tbody>
+        <tfoot>
+        <tr v-if="order==false"><!--购物车中有商品时显示-->
+            <td colspan="6">总价为：<span class="total" v-html="totalPrice">计算总价</span>元</td>
+        </tr>
+        <tr v-else><!--购物车中无商品时显示-->
+            <td colspan="6">购物车中无商品</td>
+        </tr>
+        </tfoot>
+    </table>
+</div>
+<script>
+    new Vue({
+        el:"#cart",
+        data(){
+            return{
+                list:[{id:'0001',name:'iphoneX',count:1,price:6188},
+                    {id:'0002',name:'华为p30',count:2,price:5934},
+                    {id:'0003',name:'小米RedmiBook',count:1,price:4299},
+                    {id:'0004',name:'华为畅享9e',count:3,price:799}],
+                checks: [],
+                order:false
+            }
+        },
+        methods:{
+            minus(index){
+                this.list[index].count--;
+            },
+            add(index){
+                this.list[index].count++;
+                console.log(this.list[index].count)
+            },
+            handleRemove(index){
+                this.list.splice(index, 1);
+                if(this.list.length==0){
+                    this.order=true;
+                }
+            },
+            check() {
+                if (this.checks.length >0) {
+                    this.checks = []
+                } else {
+                    this.list.forEach(item => {
+                        this.checks.push(item)
+                    })
+                }
+            }
+        },
+        computed:{
+            totalPrice(){
+                var arr=this.checks;
+                var totalPrice=0;
+                for(var i = 0;i<arr.length;i++){
+                    totalPrice =totalPrice+arr[i].price*arr[i].count;
+                }
+                return totalPrice;
+            }
+        }
+    })
+</script>
+</body>
+</html>

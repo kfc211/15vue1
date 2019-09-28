@@ -1,0 +1,66 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <title>Title</title>
+    <script src="vue2.6.10.js"></script>
+    <style type="text/css">
+        *{margin:0px; padding:0px;}
+        body{font-size:14px;}
+        #app{width:1000px; margin:10px auto;}
+        #bigImg{float:left; margin-right:10px;}
+        .item{
+            width:340px;
+            line-height:30px;
+            box-sizing: border-box;
+            background:#f7f7f7;
+            border:1px solid #f7f7f7;
+            margin:10px 0px;
+            float:left;
+        }
+        .item img{vertical-align:middle; margin-right:10px;}
+        .select{ border:1px solid darkred;}
+    </style>
+    <style type="text/css">
+        .imgsmall{
+            width: 100px;
+            height: 100px;
+        }
+        .imgBig{
+            width: 500px;
+            height: 500px;
+        }
+    </style>
+</head>
+<body>
+<div id="app">
+    <img id="bigImg" :src="imgBig" :class=['imgBig']>
+    <p>颜色选择</p>
+    <div v-for="(item,index) in list" :key="index" :class=['item',{'select':current==index}] @click="doClick(item,index)">
+        <img :src="item.url" :class=['imgsmall']>
+        <span v-html="item.con" ></span>
+    </div>
+</div>
+<script>
+    new Vue({
+        el:"#app",
+        data(){
+            return{
+                list:[{con:'4555',url:'http://image-forumweb05.test.upcdn.net/ACG.GY_20.jpg'},
+                    {con:'5656',url:'http://image-forumweb05.test.upcdn.net/ACG.GY_19.jpg'},
+                    {con:'5662',url:'http://image-forumweb05.test.upcdn.net/ACG.GY_18.jpg'},
+                    {con:'4544',url:'http://image-forumweb05.test.upcdn.net/ACG.GY_17.jpg'}],
+                current:0,
+                imgBig:'http://image-forumweb05.test.upcdn.net/ACG.GY_20.jpg'
+            }
+        },
+        methods:{
+            doClick(item,index){
+                this.current=index;
+                this.imgBig=item.url;
+            }
+        }
+    })
+</script>
+</body>
+</html>
